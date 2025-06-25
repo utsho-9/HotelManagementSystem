@@ -53,6 +53,10 @@
     <Compile Include="FormAdmin.Designer.cs">
       <DependentUpon>FormAdmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormBooking.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBooking.Designer.cs" />
     <Compile Include="FormWelcome.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +86,7 @@
     <EmbeddedResource Include="FormAdmin.resx">
       <DependentUpon>FormAdmin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormBooking.resx" />
     <EmbeddedResource Include="FormWelcome.resx">
       <DependentUpon>FormWelcome.cs</DependentUpon>
     </EmbeddedResource>

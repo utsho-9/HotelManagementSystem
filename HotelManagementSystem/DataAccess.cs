@@ -42,7 +42,7 @@ namespace HotelManagementSystem
 
         public DataAccess()
         {
-            this.Sqlcon = new SqlConnection(@"Data Source=CLASSIFIED_PC\SQLFIXED;Initial Catalog=HotelManagementSystem;Integrated Security=True;Encrypt=False;");
+            this.Sqlcon = new SqlConnection(@"Data Source=DESKTOP-64ROC09\SQLEXPRESS;Initial Catalog=HotelManagementSystem;Integrated Security=True;Encrypt=False;");
             Sqlcon.Open();
         }
 
