@@ -50,11 +50,41 @@ namespace HotelManagementSystem
                     return;
                 }
 
-                MessageBox.Show("Booking successful!", "BookRoom() Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string roomNumber = this.dgvRoom.SelectedRows[0].Cells[0].Value.ToString();
+                int pricePerDay = Convert.ToInt32(this.dgvRoom.SelectedRows[0].Cells[5].Value);
+
+                this.dataAccess.ExecuteDMLQuery($"INSERT INTO BookingHistory(GuestName, GuestPhone, GuestNid, RoomNumber, PricePerDay, BookingDate) VALUES('{this.txtGuestName.Text}', {Convert.ToInt64(this.numudGuestPhone.Value)}, {Convert.ToInt64(this.numudNid.Value)}, '{roomNumber}', {pricePerDay}, '{DateTime.Now.ToString("yyyy-MM-dd")}');");
+                this.dataAccess.ExecuteDMLQuery($"UPDATE RoomInfo SET RoomStatus = 'Booked' WHERE RoomNumber = '{roomNumber}';");
+
+                this.PopulateDataGridview("SELECT * FROM RoomInfo;");
+                MessageBox.Show("Booking successful!", "Book Room Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception e)
             {
                 MessageBox.Show($"Error: {e.Message}", "BookRoom() Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Checkout()
+        {
+            try
+            {
+                DialogResult dialogResult = MessageBox.Show("Are you sure you want to checkout?", "Checkout Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.No)
+                {
+                    return;
+                }
+
+                string roomNumber = this.dgvRoom.SelectedRows[0].Cells[0].Value.ToString();
+
+                this.dataAccess.ExecuteDMLQuery($"UPDATE RoomInfo SET RoomStatus = 'Available' WHERE RoomNumber = '{roomNumber}';");
+                this.PopulateDataGridview("SELECT * FROM RoomInfo;");
+
+                MessageBox.Show("Checkout successful!", "Checkout Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error: {e.Message}", "Checkout() Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -83,6 +113,11 @@ namespace HotelManagementSystem
         private void btnBookRoom_Click(object sender, EventArgs e)
         {
             this.BookRoom();
+        }
+
+        private void btnCheckout_Click(object sender, EventArgs e)
+        {
+            this.Checkout();
         }
     }
 }

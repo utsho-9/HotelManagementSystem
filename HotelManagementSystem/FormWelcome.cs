@@ -49,27 +49,65 @@ namespace HotelManagementSystem
             }
         }
 
+        private void SignUp()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(this.txtFullName.Text) || string.IsNullOrEmpty(this.txtEmailRegister.Text) ||
+                    string.IsNullOrEmpty(this.cmbUserType.Text) || string.IsNullOrEmpty(this.txtPasswordRegister.Text))
+                {
+                    MessageBox.Show("Please fill in all mandatory fields.", "Empty Fields", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int result = this.dataAccess.ExecuteDMLQuery($"INSERT INTO UserInfo(FullName, Email, JoinDate, Phone, UserType, Password) VALUES('{this.txtFullName.Text}', '{this.txtEmailRegister.Text}', '{this.dtpJoinDate.Text}', {this.numudPhone.Value}, '{this.cmbUserType.Text}', '{this.txtPasswordRegister.Text}');");
+                if (result != 1)
+                {
+                    MessageBox.Show("Registration failed. Please try again.", "Registration Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                MessageBox.Show("Registration Successful", "Sign Up Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.ClearAllFields();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"An error occurred during registration: {e.Message}", "SignUp() Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+        }
+
         private void Login()
         {
-            //try
-            //{
-            //    this.dataTable = this.dataAccess.ExecuteQueryTable($"SELECT * FROM UserInfo WHERE Email = '{this.txtEmailLogin.Text}' AND Password = '{this.txtPasswordLogin.Text}';");
-            //    if (this.dataTable.Rows.Count == 0)
-            //    {
-            //        MessageBox.Show("Invalid Email or Password", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            //        return;
-            //    }
+            try
+            {
+                this.dataTable = this.dataAccess.ExecuteQueryTable(
+                    $"SELECT * FROM UserInfo WHERE Email = '{this.txtEmailLogin.Text}' AND Password = '{this.txtPasswordLogin.Text}';");
+                if (this.dataTable.Rows.Count == 0)
+                {
+                    MessageBox.Show("Invalid Email or Password", "Login Failed", MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation);
+                    return;
+                }
 
-            //    MessageBox.Show("Login Successful", "Login Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //}
-            //catch (Exception e)
-            //{
-
-            //}
-
-            FormAdmin formAdmin = new FormAdmin();
-            formAdmin.Show();
-            this.Hide();
+                MessageBox.Show("Login Successful", "Login Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (this.dataTable.Rows[0][4].ToString().Contains("admin") || this.dataTable.Rows[0][4].ToString().Contains("Manager"))
+                {
+                    FormAdmin formAdmin = new FormAdmin();
+                    this.Visible = false;
+                    formAdmin.Visible = true;
+                }
+                else if(this.dataTable.Rows[0][4].ToString().Contains("employee"))
+                {
+                    FormBooking formBooking = new FormBooking();
+                    this.Visible = false;
+                    formBooking.Visible = true;
+                }
+            }
+            catch (Exception e)
+            {                                   
+                MessageBox.Show($"An error occurred during login: {e.Message}", "Login() Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
 
         private void ClearAllFields()
@@ -104,7 +142,7 @@ namespace HotelManagementSystem
 
         private void btnSignUp_Click(object sender, EventArgs e)
         {
-            this.SetLoginInterface();
+            this.SignUp();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)

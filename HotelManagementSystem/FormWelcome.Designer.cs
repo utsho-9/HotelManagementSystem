@@ -442,7 +442,7 @@
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(215, 35);
             this.btnClear.TabIndex = 26;
-            this.btnClear.Text = "Clear";
+            this.btnClear.Text = "Cancel";
             this.btnClear.UseVisualStyleBackColor = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -454,10 +454,10 @@
             this.ClientSize = new System.Drawing.Size(678, 625);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.btnSignUp);
             this.Controls.Add(this.panelSignup);
             this.Controls.Add(this.panelSignin);
+            this.Controls.Add(this.btnSignUp);
+            this.Controls.Add(this.btnLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "FormWelcome";
